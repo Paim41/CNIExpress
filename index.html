@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creativity & Innovation Express</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0a1628;
+  --primary-mid: #0d2045;
+  --accent: #1a6cf0;
+  --accent2: #00c4ff;
+  --accent3: #7b4fff;
+  --glow: rgba(26,108,240,0.35);
+  --glow2: rgba(0,196,255,0.2);
+  --text: #e8f0ff;
+  --text-muted: #7a9acc;
+  --card-bg: rgba(10,22,40,0.85);
+  --card-border: rgba(26,108,240,0.3);
+  --card-hover: rgba(26,108,240,0.15);
+  --glass: rgba(255,255,255,0.04);
+  --correct: #00e676;
+  --wrong: #ff4444;
+  --nav-h: 64px;
+}
+[data-theme="light"] {
+  --primary: #f0f4ff;
+  --primary-mid: #e0eaff;
+  --accent: #1a6cf0;
+  --accent2: #0080cc;
+  --accent3: #5a3cc0;
+  --glow: rgba(26,108,240,0.15);
+  --glow2: rgba(0,128,204,0.1);
+  --text: #0a1628;
+  --text-muted: #3a5a8c;
+  --card-bg: rgba(255,255,255,0.9);
+  --card-border: rgba(26,108,240,0.25);
+  --card-hover: rgba(26,108,240,0.08);
+  --glass: rgba(26,108,240,0.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Exo 2',sans-serif;
+  background:var(--primary);
+  color:var(--text);
+  min-height:100vh;
+  transition:background 0.3s,color 0.3s;
+  cursor:none;
+}
+.cursor{
+  width:12px;height:12px;
+  background:var(--accent2);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;
+  z-index:99999;
+  transition:transform 0.1s;
+  mix-blend-mode:screen;
+}
+.cursor-ring{
+  width:32px;height:32px;
+  border:1px solid var(--accent);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;
+  z-index:99998;
+  transition:transform 0.18s ease, width 0.2s, height 0.2s;
+}
+
+/* BG CANVAS */
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* LOADING */
+#loader{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--primary);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.6s;
+}
+.loader-ring{
+  width:80px;height:80px;
+  border:2px solid var(--card-border);
+  border-top:2px solid var(--accent2);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+.loader-text{
+  font-family:'Orbitron',monospace;
+  font-size:13px;
+  color:var(--accent2);
+  margin-top:16px;
+  letter-spacing:3px;
+  animation:pulse 2s ease infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--nav-h);
+  z-index:1000;
+  background:rgba(10,22,40,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--card-border);
+  display:flex;align-items:center;
+  padding:0 2rem;
+  gap:2rem;
+}
+[data-theme="light"] nav{background:rgba(240,244,255,0.92);}
+.nav-logo{
+  font-family:'Orbitron',monospace;
+  font-size:15px;font-weight:700;
+  color:var(--accent2);
+  letter-spacing:2px;
+  margin-right:auto;
+  display:flex;align-items:center;gap:10px;
+  white-space:nowrap;
+}
+.nav-logo svg{width:28px;height:28px;}
+.nav-links{display:flex;gap:0.25rem;align-items:center;}
+.nav-link{
+  font-family:'Orbitron',monospace;
+  font-size:10px;
+  letter-spacing:1.5px;
+  padding:6px 14px;
+  border-radius:4px;
+  cursor:pointer;
+  color:var(--text-muted);
+  transition:all 0.2s;
+  border:1px solid transparent;
+  background:none;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.nav-link:hover,.nav-link.active{
+  color:var(--accent2);
+  border-color:var(--card-border);
+  background:var(--card-hover);
+}
+.theme-btn{
+  width:38px;height:38px;
+  border-radius:50%;
+  border:1px solid var(--card-border);
+  background:var(--glass);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--accent2);
+  transition:all 0.2s;
+  flex-shrink:0;
+}
+.theme-btn:hover{background:var(--card-hover);box-shadow:0 0 12px var(--glow);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:2px;background:var(--text-muted);transition:all 0.3s;}
+
+/* SECTIONS */
+.section{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:none;
+  padding-top:var(--nav-h);
+}
+.section.active{display:block;}
+
+/* HERO */
+#hero{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  padding:var(--nav-h) 2rem 4rem;
+  min-height:100vh;
+}
+.hero-badge{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;
+  letter-spacing:3px;
+  color:var(--accent2);
+  border:1px solid var(--accent2);
+  padding:5px 16px;
+  border-radius:2px;
+  margin-bottom:2rem;
+  opacity:0;animation:fadeUp 0.6s 0.2s forwards;
+}
+.hero-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(28px,5vw,68px);
+  font-weight:900;
+  line-height:1.1;
+  margin-bottom:1.5rem;
+  opacity:0;animation:fadeUp 0.7s 0.4s forwards;
+}
+.hero-title .line1{display:block;color:var(--text);}
+.hero-title .line2{
+  display:block;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub{
+  font-size:18px;color:var(--text-muted);
+  max-width:600px;line-height:1.7;
+  margin-bottom:2.5rem;
+  opacity:0;animation:fadeUp 0.7s 0.6s forwards;
+}
+.hero-btns{
+  display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;
+  opacity:0;animation:fadeUp 0.7s 0.8s forwards;
+}
+.btn-primary{
+  font-family:'Orbitron',monospace;
+  font-size:11px;letter-spacing:2px;
+  padding:14px 28px;
+  background:var(--accent);
+  color:#fff;border:none;border-radius:4px;
+  cursor:pointer;
+  transition:all 0.2s;
+  position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);
+  opacity:0;transition:opacity 0.2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--glow);}
+.btn-primary:hover::before{opacity:1;}
+.btn-outline{
+  font-family:'Orbitron',monospace;
+  font-size:11px;letter-spacing:2px;
+  padding:14px 28px;
+  background:transparent;
+  color:var(--accent2);
+  border:1px solid var(--accent2);
+  border-radius:4px;cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-outline:hover{background:var(--card-hover);transform:translateY(-2px);box-shadow:0 8px 24px var(--glow2);}
+
+.hero-stats{
+  display:flex;gap:2rem;margin-top:3rem;
+  opacity:0;animation:fadeUp 0.7s 1s forwards;
+}
+.stat-item{text-align:center;}
+.stat-num{font-family:'Orbitron',monospace;font-size:28px;font-weight:700;color:var(--accent2);}
+.stat-label{font-size:12px;color:var(--text-muted);letter-spacing:1px;margin-top:4px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* CARDS */
+.card{
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  padding:1.5rem;
+  transition:all 0.3s;
+  backdrop-filter:blur(10px);
+}
+.card:hover{
+  border-color:var(--accent);
+  box-shadow:0 0 24px var(--glow);
+  transform:translateY(-3px);
+}
+
+/* NOTES SECTION */
+.section-header{
+  text-align:center;padding:3rem 2rem 2rem;
+}
+.section-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(20px,3vw,36px);
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:0.75rem;
+}
+.section-title span{color:var(--accent2);}
+.section-sub{color:var(--text-muted);font-size:15px;}
+
+.chapter-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.25rem;
+  padding:0 2rem 2rem;
+  max-width:1200px;
+  margin:0 auto;
+}
+.chapter-card{
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:all 0.3s;
+}
+.chapter-card:hover{
+  border-color:var(--accent);
+  box-shadow:0 0 20px var(--glow);
+  transform:translateY(-4px);
+}
+.chapter-header{
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  padding:1.25rem 1.5rem;
+  display:flex;align-items:center;gap:12px;
+}
+.chapter-num{
+  font-family:'Orbitron',monospace;
+  font-size:22px;font-weight:900;
+  color:rgba(255,255,255,0.3);
+}
+.chapter-title-text{font-weight:600;font-size:15px;color:#fff;}
+.chapter-body{padding:1.25rem 1.5rem;}
+.chapter-desc{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:1rem;}
+.chapter-meta{display:flex;gap:1rem;font-size:12px;color:var(--text-muted);}
+.chapter-meta span{display:flex;align-items:center;gap:5px;}
+.chapter-meta svg{width:14px;height:14px;}
+.progress-bar-wrap{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:1rem;}
+.progress-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.5s;}
+
+/* NOTES DETAIL */
+.notes-view{display:none;padding:2rem;max-width:900px;margin:0 auto;}
+.notes-view.active{display:block;}
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',monospace;font-size:11px;letter-spacing:1.5px;
+  color:var(--accent2);cursor:pointer;
+  border:1px solid var(--card-border);
+  padding:8px 16px;border-radius:4px;
+  margin-bottom:2rem;
+  transition:all 0.2s;background:none;
+}
+.back-btn:hover{background:var(--card-hover);}
+.notes-content h2{
+  font-family:'Orbitron',monospace;
+  font-size:22px;margin:2rem 0 1rem;
+  color:var(--accent2);
+  padding-bottom:0.5rem;
+  border-bottom:1px solid var(--card-border);
+}
+.notes-content h3{
+  font-size:16px;font-weight:600;
+  margin:1.5rem 0 0.75rem;
+  color:var(--text);
+}
+.notes-content p{
+  font-size:14px;line-height:1.8;
+  color:var(--text-muted);
+  margin-bottom:1rem;
+}
+.notes-content ul{
+  padding-left:1.5rem;
+  margin-bottom:1rem;
+}
+.notes-content li{
+  font-size:14px;line-height:1.8;
+  color:var(--text-muted);
+  margin-bottom:4px;
+}
+.notes-content li strong,.notes-content p strong{color:var(--accent2);}
+.key-box{
+  background:linear-gradient(135deg,rgba(26,108,240,0.1),rgba(123,79,255,0.1));
+  border:1px solid var(--accent);
+  border-radius:6px;
+  padding:1.25rem;
+  margin:1.5rem 0;
+}
+.key-box .label{
+  font-family:'Orbitron',monospace;
+  font-size:10px;letter-spacing:2px;
+  color:var(--accent2);margin-bottom:0.5rem;
+}
+.summary-box{
+  background:rgba(0,196,255,0.06);
+  border-left:3px solid var(--accent2);
+  padding:1rem 1.25rem;
+  margin:1.5rem 0;
+  border-radius:0 6px 6px 0;
+}
+.term-table{
+  width:100%;border-collapse:collapse;
+  margin:1rem 0;font-size:13px;
+}
+.term-table th{
+  background:rgba(26,108,240,0.15);
+  padding:10px 14px;
+  text-align:left;
+  font-family:'Orbitron',monospace;
+  font-size:10px;letter-spacing:1px;
+  color:var(--accent2);
+  border-bottom:1px solid var(--card-border);
+}
+.term-table td{
+  padding:10px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  color:var(--text-muted);
+  vertical-align:top;
+}
+.term-table tr:hover td{background:var(--glass);}
+
+/* SEARCH */
+.search-wrap{
+  max-width:600px;margin:0 auto 2rem;
+  padding:0 2rem;position:relative;
+}
+.search-input{
+  width:100%;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:6px;
+  padding:12px 16px 12px 44px;
+  font-family:'Exo 2',sans-serif;
+  font-size:14px;color:var(--text);
+  outline:none;transition:border 0.2s;
+}
+.search-input:focus{border-color:var(--accent);}
+.search-icon{
+  position:absolute;left:30px;top:50%;transform:translateY(-50%);
+  width:18px;height:18px;color:var(--text-muted);
+}
+
+/* FLASHCARD SECTION */
+.flashcard-controls{
+  display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:center;
+  padding:0 2rem 1.5rem;
+}
+.fc-btn{
+  font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1px;
+  padding:9px 18px;border-radius:4px;cursor:pointer;
+  border:1px solid var(--card-border);background:var(--glass);color:var(--text-muted);
+  transition:all 0.2s;
+}
+.fc-btn:hover,.fc-btn.active{border-color:var(--accent);color:var(--accent2);background:var(--card-hover);}
+
+.flashcard-arena{
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 2rem 2rem;
+}
+.fc-stats{
+  display:flex;gap:2rem;margin-bottom:2rem;
+}
+.fc-stat{text-align:center;}
+.fc-stat-num{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;color:var(--accent2);}
+.fc-stat-label{font-size:11px;color:var(--text-muted);letter-spacing:1px;}
+
+.flashcard-container{
+  width:100%;max-width:640px;height:300px;perspective:1200px;
+  cursor:pointer;
+}
+.flashcard-inner{
+  width:100%;height:100%;position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.flashcard-inner.flipped{transform:rotateY(180deg);}
+.flashcard-face{
+  position:absolute;inset:0;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  padding:2rem;
+  backface-visibility:hidden;
+}
+.flashcard-face.back{transform:rotateY(180deg);border-color:var(--accent);background:linear-gradient(135deg,rgba(26,108,240,0.1),rgba(123,79,255,0.08));}
+.fc-tag{
+  font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;
+  color:var(--text-muted);margin-bottom:1rem;
+  padding:4px 10px;border:1px solid var(--card-border);border-radius:2px;
+}
+.fc-question{font-size:18px;font-weight:500;color:var(--text);line-height:1.5;}
+.fc-answer{font-size:15px;color:var(--text-muted);line-height:1.7;}
+.fc-answer strong{color:var(--accent2);}
+.fc-hint{font-size:11px;color:var(--text-muted);margin-top:1rem;opacity:0.6;}
+.fc-nav{
+  display:flex;gap:1rem;align-items:center;margin-top:1.5rem;
+}
+.fc-nav-btn{
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--card-border);background:var(--glass);
+  color:var(--text-muted);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;
+}
+.fc-nav-btn:hover{border-color:var(--accent);color:var(--accent2);}
+.fc-counter{
+  font-family:'Orbitron',monospace;font-size:13px;color:var(--text-muted);
+  padding:0 1rem;
+}
+.fc-mastered-btn{
+  margin-top:1rem;
+  font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1.5px;
+  padding:10px 24px;border-radius:4px;
+  border:1px solid var(--card-border);background:var(--glass);
+  color:var(--text-muted);cursor:pointer;transition:all 0.2s;
+}
+.fc-mastered-btn.mastered{border-color:var(--correct);color:var(--correct);background:rgba(0,230,118,0.08);}
+.fc-mastered-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+.fc-chapter-select{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:4px;padding:8px 14px;color:var(--text);
+  font-family:'Exo 2',sans-serif;font-size:13px;outline:none;cursor:pointer;
+}
+
+/* QUIZ SECTION */
+.quiz-start{
+  display:flex;flex-direction:column;align-items:center;
+  padding:2rem;text-align:center;max-width:700px;margin:0 auto;
+}
+.quiz-options-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:1rem;width:100%;margin:1.5rem 0;
+}
+.quiz-option-card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:8px;padding:1.25rem;cursor:pointer;transition:all 0.2s;text-align:left;
+}
+.quiz-option-card:hover,.quiz-option-card.selected{border-color:var(--accent);background:var(--card-hover);}
+.quiz-option-card .opt-label{
+  font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1.5px;
+  color:var(--text-muted);margin-bottom:0.5rem;
+}
+.quiz-option-card .opt-val{font-size:15px;font-weight:500;color:var(--text);}
+
+.quiz-engine{display:none;padding:1.5rem 2rem;max-width:800px;margin:0 auto;}
+.quiz-engine.active{display:block;}
+.quiz-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;
+}
+.quiz-progress-wrap{flex:1;min-width:200px;}
+.quiz-progress-bar{
+  height:6px;background:rgba(255,255,255,0.1);border-radius:3px;margin-top:6px;
+}
+.quiz-progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.4s;}
+.quiz-timer{
+  font-family:'Orbitron',monospace;font-size:18px;font-weight:700;
+  color:var(--accent2);min-width:60px;text-align:right;
+}
+.quiz-timer.warning{color:#ff8800;}
+.quiz-timer.danger{color:var(--wrong);animation:pulse 0.5s ease infinite;}
+.quiz-q-num{font-size:12px;color:var(--text-muted);margin-bottom:0.5rem;}
+.quiz-question{
+  font-size:18px;font-weight:500;line-height:1.6;
+  margin-bottom:2rem;color:var(--text);
+}
+.quiz-answers{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.5rem;}
+.quiz-answer-btn{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:8px;padding:1rem 1.25rem;
+  cursor:pointer;transition:all 0.2s;
+  text-align:left;display:flex;align-items:flex-start;gap:12px;
+  font-family:'Exo 2',sans-serif;font-size:14px;color:var(--text);
+  line-height:1.5;
+}
+.quiz-answer-btn:hover{border-color:var(--accent);background:var(--card-hover);}
+.quiz-answer-btn.correct{border-color:var(--correct);background:rgba(0,230,118,0.1);color:var(--correct);}
+.quiz-answer-btn.wrong{border-color:var(--wrong);background:rgba(255,68,68,0.1);color:var(--wrong);}
+.quiz-answer-btn.disabled{pointer-events:none;}
+.ans-letter{
+  font-family:'Orbitron',monospace;font-size:11px;font-weight:700;
+  width:22px;height:22px;border-radius:4px;
+  background:rgba(255,255,255,0.08);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.quiz-explanation{
+  background:rgba(26,108,240,0.08);
+  border:1px solid var(--card-border);border-radius:6px;
+  padding:1rem 1.25rem;margin-bottom:1rem;
+  font-size:13px;color:var(--text-muted);line-height:1.7;
+  display:none;
+}
+.quiz-explanation.visible{display:block;}
+.quiz-next-btn{
+  font-family:'Orbitron',monospace;font-size:11px;letter-spacing:1.5px;
+  padding:12px 28px;border-radius:4px;
+  background:var(--accent);color:#fff;border:none;cursor:pointer;
+  transition:all 0.2s;display:none;
+}
+.quiz-next-btn.visible{display:inline-block;}
+.quiz-next-btn:hover{box-shadow:0 0 16px var(--glow);}
+
+/* RESULTS */
+.quiz-results{display:none;padding:2rem;max-width:700px;margin:0 auto;text-align:center;}
+.quiz-results.active{display:block;}
+.result-grade{
+  font-family:'Orbitron',monospace;font-size:72px;font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:0.5rem;
+}
+.result-pct{font-family:'Orbitron',monospace;font-size:24px;color:var(--text-muted);}
+.result-cards{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;
+  margin:2rem 0;
+}
+.result-card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:8px;padding:1.25rem 0.75rem;text-align:center;
+}
+.result-card .rn{font-family:'Orbitron',monospace;font-size:24px;font-weight:700;color:var(--accent2);}
+.result-card .rl{font-size:11px;color:var(--text-muted);margin-top:4px;}
+.review-list{text-align:left;margin:1.5rem 0;}
+.review-item{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:6px;padding:1rem;margin-bottom:0.75rem;
+}
+.review-item.correct{border-left:3px solid var(--correct);}
+.review-item.wrong{border-left:3px solid var(--wrong);}
+.review-q{font-size:13px;color:var(--text);margin-bottom:6px;font-weight:500;}
+.review-a{font-size:12px;color:var(--text-muted);}
+.review-a span{font-weight:600;}
+.review-a .ca{color:var(--correct);}
+.review-a .wa{color:var(--wrong);}
+
+/* PROGRESS SECTION */
+.progress-section{padding:2rem;max-width:1100px;margin:0 auto;}
+.progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;margin-bottom:2rem;}
+.prog-card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:8px;padding:1.5rem;text-align:center;
+}
+.prog-circle{
+  width:90px;height:90px;margin:0 auto 1rem;position:relative;
+}
+.prog-circle svg{width:90px;height:90px;transform:rotate(-90deg);}
+.prog-circle .bg{fill:none;stroke:rgba(255,255,255,0.08);stroke-width:8;}
+.prog-circle .fill{fill:none;stroke:var(--accent2);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s ease;}
+.prog-circle .val{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--text);
+}
+.prog-label{font-size:13px;color:var(--text-muted);}
+.badge-grid{
+  display:flex;flex-wrap:wrap;gap:1rem;margin-top:1rem;
+}
+.badge{
+  display:flex;align-items:center;gap:10px;
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:8px;padding:0.75rem 1rem;
+  font-size:13px;color:var(--text-muted);
+  transition:all 0.2s;
+}
+.badge.earned{border-color:var(--accent2);color:var(--accent2);}
+.badge svg{width:22px;height:22px;flex-shrink:0;}
+.streak-display{
+  font-family:'Orbitron',monospace;font-size:40px;font-weight:900;
+  color:var(--accent2);text-align:center;margin:0.5rem 0;
+}
+
+/* ABOUT */
+.about-section{padding:3rem 2rem;max-width:900px;margin:0 auto;}
+.about-section h2{
+  font-family:'Orbitron',monospace;font-size:28px;
+  color:var(--accent2);margin-bottom:1.5rem;
+}
+.about-section p{font-size:15px;color:var(--text-muted);line-height:1.9;margin-bottom:1rem;}
+.team-card{
+  display:flex;align-items:center;gap:1.5rem;
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:8px;padding:1.5rem;margin-top:1.5rem;
+}
+.avatar{
+  width:64px;height:64px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:20px;font-weight:700;
+  color:#fff;flex-shrink:0;
+}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:1;
+  background:rgba(5,12,24,0.95);
+  border-top:1px solid var(--card-border);
+  padding:3rem 2rem 2rem;
+  text-align:center;
+}
+[data-theme="light"] footer{background:rgba(220,230,255,0.95);}
+.footer-logo{
+  font-family:'Orbitron',monospace;font-size:16px;font-weight:700;
+  color:var(--accent2);margin-bottom:1.5rem;letter-spacing:2px;
+}
+.footer-links{
+  display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:1.5rem;
+}
+.footer-link{
+  font-size:13px;color:var(--text-muted);text-decoration:none;
+  cursor:pointer;transition:color 0.2s;
+}
+.footer-link:hover{color:var(--accent2);}
+.footer-social{display:flex;gap:1rem;justify-content:center;margin-bottom:1.5rem;}
+.social-btn{
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--card-border);background:var(--glass);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-muted);cursor:pointer;transition:all 0.2s;
+  text-decoration:none;
+}
+.social-btn:hover{border-color:var(--accent2);color:var(--accent2);box-shadow:0 0 10px var(--glow);}
+.footer-copy{font-size:12px;color:var(--text-muted);opacity:0.6;}
+
+/* MOBILE NAV */
+@media(max-width:768px){
+  .nav-links{display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:rgba(10,22,40,0.98);flex-direction:column;padding:2rem;gap:0.5rem;z-index:999;}
+  .nav-links.open{display:flex;}
+  [data-theme="light"] .nav-links{background:rgba(240,244,255,0.98);}
+  .nav-link{font-size:12px;padding:12px 16px;border-radius:6px;}
+  .hamburger{display:flex;}
+  .quiz-answers{grid-template-columns:1fr;}
+  .result-cards{grid-template-columns:repeat(2,1fr);}
+  .hero-stats{gap:1.5rem;}
+}
+@media(max-width:480px){
+  .chapter-grid{grid-template-columns:1fr;padding:0 1rem 1rem;}
+  .hero-title{font-size:24px;}
+  .result-cards{grid-template-columns:1fr 1fr;}
+}
+
+/* ANIMATIONS */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity 0.5s,transform 0.5s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.glow-pulse{animation:glowPulse 3s ease infinite;}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 10px var(--glow);}50%{box-shadow:0 0 30px var(--glow),0 0 60px var(--glow2);}}
+
+/* SEARCH HIGHLIGHT */
+mark{background:rgba(0,196,255,0.25);color:var(--accent2);border-radius:2px;}
+
+/* TOOLTIP */
+.tooltip{position:relative;}
+.tooltip::after{
+  content:attr(data-tip);
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:rgba(10,22,40,0.95);color:var(--text);font-size:11px;
+  padding:5px 10px;border-radius:4px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity 0.2s;
+  border:1px solid var(--card-border);
+}
+.tooltip:hover::after{opacity:1;}
+
+/* XP BAR */
+.xp-bar-wrap{
+  background:rgba(255,255,255,0.08);border-radius:3px;height:6px;
+  margin-top:6px;overflow:hidden;
+}
+.xp-bar{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));border-radius:3px;transition:width 0.5s;}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<canvas id="bg-canvas"></canvas>
+
+<div id="loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">LOADING HUB...</div>
+</div>
+
+<nav id="navbar">
+  <div class="nav-logo">
+    <svg viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M9 14 L14 7 L19 14 L14 21 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle cx="14" cy="14" r="2" fill="currentColor"/>
+    </svg>
+    C&amp;I HUB
+  </div>
+  <div class="nav-links" id="navLinks">
+    <button class="nav-link active" onclick="showSection('hero')">HOME</button>
+    <button class="nav-link" onclick="showSection('notes')">NOTES</button>
+    <button class="nav-link" onclick="showSection('flashcards')">FLASHCARDS</button>
+    <button class="nav-link" onclick="showSection('quiz')">QUIZ</button>
+    <button class="nav-link" onclick="showSection('progress')">PROGRESS</button>
+    <button class="nav-link" onclick="showSection('about')">ABOUT</button>
+  </div>
+  <button class="theme-btn tooltip" data-tip="Toggle theme" onclick="toggleTheme()" id="themeBtn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HOME -->
+<section class="section active" id="hero">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 64px);padding:2rem;text-align:center;">
+    <div class="hero-badge">CREATIVE LEARNING PLATFORM · BIC31502</div>
+    <h1 class="hero-title">
+      <span class="line1">Creativity &amp;</span>
+      <span class="line2">Innovation Express</span>
+    </h1>
+    <p class="hero-sub">Master the art of creative thinking, problem-solving, and innovation through interactive notes, flashcards, and quizzes.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showSection('notes')">START LEARNING</button>
+      <button class="btn-outline" onclick="showSection('flashcards')">FLASHCARDS</button>
+      <button class="btn-outline" onclick="showSection('quiz')">TAKE QUIZ</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num" id="statCards">55</div><div class="stat-label">FLASHCARDS</div></div>
+      <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">QUIZ Q's</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">CHAPTERS</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTES -->
+<section class="section" id="notes">
+  <div id="notesMain">
+    <div class="section-header">
+      <h2 class="section-title">Study <span>Notes</span></h2>
+      <p class="section-sub">Complete chapter notes with key concepts and summaries</p>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" placeholder="Search chapters..." oninput="filterChapters(this.value)" id="chapterSearch">
+    </div>
+    <div class="chapter-grid" id="chapterGrid"></div>
+  </div>
+  <div class="notes-view" id="notesDetail">
+    <button class="back-btn" onclick="closeNotes()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      BACK TO CHAPTERS
+    </button>
+    <div class="notes-content" id="notesContent"></div>
+  </div>
+</section>
+
+<!-- FLASHCARDS -->
+<section class="section" id="flashcards">
+  <div class="section-header">
+    <h2 class="section-title">Flash<span>cards</span></h2>
+    <p class="section-sub">Flip, study, and master all concepts</p>
+  </div>
+  <div class="flashcard-controls">
+    <select class="fc-chapter-select" id="fcChapter" onchange="loadFlashcards()">
+      <option value="all">All Chapters</option>
+      <option value="0">Chapter 1: Intro to Creativity</option>
+      <option value="1">Chapter 2: CPS</option>
+      <option value="2">Chapter 3: Problem Definition</option>
+    </select>
+    <button class="fc-btn" onclick="shuffleCards()">⟳ SHUFFLE</button>
+    <button class="fc-btn" id="autoPlayBtn" onclick="toggleAutoPlay()">▶ AUTO-PLAY</button>
+    <button class="fc-btn" onclick="resetMastered()">RESET</button>
+  </div>
+  <div class="flashcard-arena">
+    <div class="fc-stats">
+      <div class="fc-stat"><div class="fc-stat-num" id="fcTotal">0</div><div class="fc-stat-label">TOTAL</div></div>
+      <div class="fc-stat"><div class="fc-stat-num" id="fcMastered">0</div><div class="fc-stat-label">MASTERED</div></div>
+      <div class="fc-stat"><div class="fc-stat-num" id="fcRemaining">0</div><div class="fc-stat-label">REMAINING</div></div>
+    </div>
+    <div style="width:100%;max-width:640px;margin-bottom:1rem;">
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="fcProgressBar" style="width:0%"></div></div>
+    </div>
+    <div class="flashcard-container" onclick="flipCard()">
+      <div class="flashcard-inner" id="flashcardInner">
+        <div class="flashcard-face front">
+          <div class="fc-tag" id="fcTag">QUESTION</div>
+          <div class="fc-question" id="fcQuestion">Loading...</div>
+          <div class="fc-hint">Click to reveal answer</div>
+        </div>
+        <div class="flashcard-face back">
+          <div class="fc-tag">ANSWER</div>
+          <div class="fc-answer" id="fcAnswer"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" onclick="prevCard()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="fc-counter" id="fcCounter">1 / 1</div>
+      <button class="fc-nav-btn" onclick="nextCard()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <button class="fc-mastered-btn" id="fcMasteredBtn" onclick="toggleMastered()">MARK AS MASTERED</button>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="section" id="quiz">
+  <div id="quizStart">
+    <div class="section-header">
+      <h2 class="section-title">Quiz <span>Engine</span></h2>
+      <p class="section-sub">Test your knowledge with exam-style questions</p>
+    </div>
+    <div class="quiz-start">
+      <p style="color:var(--text-muted);margin-bottom:1rem;">Select chapter and difficulty to begin</p>
+      <div class="quiz-options-grid">
+        <div>
+          <div class="opt-label" style="font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:0.75rem;">CHAPTER</div>
+          <div id="chapterOpts">
+            <div class="quiz-option-card selected" data-chap="all" onclick="selectQuizOpt(this,'chap')"><div class="opt-label">SELECT</div><div class="opt-val">All Chapters</div></div>
+            <div class="quiz-option-card" data-chap="0" onclick="selectQuizOpt(this,'chap')" style="margin-top:0.75rem;"><div class="opt-label">CHAPTER 1</div><div class="opt-val">Intro to Creativity</div></div>
+            <div class="quiz-option-card" data-chap="1" onclick="selectQuizOpt(this,'chap')" style="margin-top:0.75rem;"><div class="opt-label">CHAPTER 2</div><div class="opt-val">CPS</div></div>
+            <div class="quiz-option-card" data-chap="2" onclick="selectQuizOpt(this,'chap')" style="margin-top:0.75rem;"><div class="opt-label">CHAPTER 3</div><div class="opt-val">Problem Definition</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="opt-label" style="font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:0.75rem;">QUESTIONS</div>
+          <div id="countOpts">
+            <div class="quiz-option-card" data-count="10" onclick="selectQuizOpt(this,'count')"><div class="opt-label">QUICK</div><div class="opt-val">10 Questions</div></div>
+            <div class="quiz-option-card selected" data-count="20" onclick="selectQuizOpt(this,'count')" style="margin-top:0.75rem;"><div class="opt-label">STANDARD</div><div class="opt-val">20 Questions</div></div>
+            <div class="quiz-option-card" data-count="999" onclick="selectQuizOpt(this,'count')" style="margin-top:0.75rem;"><div class="opt-label">FULL</div><div class="opt-val">All Questions</div></div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="startQuiz()" style="margin-top:1rem;">BEGIN QUIZ</button>
+    </div>
+  </div>
+  <div class="quiz-engine" id="quizEngine">
+    <div class="quiz-meta">
+      <div class="quiz-progress-wrap">
+        <div style="font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1px;color:var(--text-muted);" id="quizProgressLabel">0 / 0</div>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div></div>
+      </div>
+      <div class="quiz-timer" id="quizTimer">00:00</div>
+    </div>
+    <div class="quiz-q-num" id="qNum">Question 1</div>
+    <div class="quiz-question" id="qText"></div>
+    <div class="quiz-answers" id="qAnswers"></div>
+    <div class="quiz-explanation" id="qExplanation"></div>
+    <button class="quiz-next-btn" id="qNextBtn" onclick="nextQuestion()">NEXT →</button>
+  </div>
+  <div class="quiz-results" id="quizResults">
+    <div class="result-grade" id="resultGrade">A</div>
+    <div class="result-pct" id="resultPct">100%</div>
+    <div style="color:var(--text-muted);font-size:14px;margin-top:0.5rem;" id="resultMsg"></div>
+    <div class="result-cards" id="resultCards"></div>
+    <div style="display:flex;gap:1rem;justify-content:center;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="retryQuiz()">RETRY QUIZ</button>
+      <button class="btn-outline" onclick="showSection('quiz')">NEW QUIZ</button>
+    </div>
+    <div class="review-list" id="reviewList"></div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section class="section" id="progress">
+  <div class="section-header">
+    <h2 class="section-title">My <span>Progress</span></h2>
+    <p class="section-sub">Track your learning journey</p>
+  </div>
+  <div class="progress-section">
+    <div class="progress-grid" id="progressGrid"></div>
+    <div style="margin-bottom:1.5rem;">
+      <h3 style="font-family:'Orbitron',monospace;font-size:13px;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:1rem;">ACHIEVEMENTS</h3>
+      <div class="badge-grid" id="badgeGrid"></div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);margin-bottom:0.5rem;">STUDY STREAK</div>
+      <div class="streak-display" id="streakDisplay">0</div>
+      <div style="font-size:12px;color:var(--text-muted);">DAYS IN A ROW</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="about-section">
+    <h2>About This Platform</h2>
+    <p>The <strong style="color:var(--accent2);">Creativity &amp; Innovation Express</strong> is a comprehensive study platform for BIC31502 — designed to make learning engaging, interactive, and effective.</p>
+    <p>This platform covers all core chapters including Introduction to Creativity and Innovation, Creative Problem Solving (CPS), and Creative Problem Definition — with full notes, flashcard systems, and auto-marked quiz engines.</p>
+    <div class="team-card">
+      <div class="avatar">P</div>
+      <div>
+        <div style="font-weight:600;font-size:16px;margin-bottom:4px;">Paim41</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">Developer &amp; Content Creator</div>
+        <a href="https://github.com/Paim41" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent2);text-decoration:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          github.com/Paim41
+        </a>
+      </div>
+    </div>
+    <div style="margin-top:2rem;">
+      <h3 style="font-family:'Orbitron',monospace;font-size:14px;letter-spacing:1.5px;color:var(--accent2);margin-bottom:1rem;">KEYBOARD SHORTCUTS</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">
+        <div class="card" style="display:flex;align-items:center;gap:12px;padding:1rem;">
+          <span style="font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:4px;font-size:13px;">Space</span>
+          <span style="font-size:13px;color:var(--text-muted);">Flip flashcard</span>
+        </div>
+        <div class="card" style="display:flex;align-items:center;gap:12px;padding:1rem;">
+          <span style="font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:4px;font-size:13px;">← →</span>
+          <span style="font-size:13px;color:var(--text-muted);">Navigate cards</span>
+        </div>
+        <div class="card" style="display:flex;align-items:center;gap:12px;padding:1rem;">
+          <span style="font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:4px;font-size:13px;">M</span>
+          <span style="font-size:13px;color:var(--text-muted);">Mark mastered</span>
+        </div>
+        <div class="card" style="display:flex;align-items:center;gap:12px;padding:1rem;">
+          <span style="font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:4px;font-size:13px;">1-4</span>
+          <span style="font-size:13px;color:var(--text-muted);">Answer quiz</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">C&amp;I EXPRESS</div>
+  <div class="footer-links">
+    <span class="footer-link" onclick="showSection('hero')">Home</span>
+    <span class="footer-link" onclick="showSection('notes')">Notes</span>
+    <span class="footer-link" onclick="showSection('flashcards')">Flashcards</span>
+    <span class="footer-link" onclick="showSection('quiz')">Quiz</span>
+    <span class="footer-link" onclick="showSection('progress')">Progress</span>
+    <span class="footer-link" onclick="showSection('about')">About</span>
+  </div>
+  <div class="footer-social">
+    <a class="social-btn" href="https://github.com/Paim41" target="_blank" title="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+  </div>
+  <div class="footer-copy">© 2026 Creativity &amp; Innovation Express  · BIC31502 · Built by Paim41</div>
+</footer>
+
+<script>
+// ===== DATA =====
+const chapters = [
+  {
+    title:"Introduction to Creativity & Innovation",
+    desc:"Explore the core concepts of creativity, the Four P's model, innovation types, and creativity killers.",
+    topics:12, cards:55,
+    content:`<h2>Chapter 1: Introduction to Creativity & Innovation</h2>
+<h3>1. What is Creativity?</h3>
+<p>Creativity is <strong>the creation of something that is both new (novel) and useful</strong>. — Teresa Amabile &amp; Pratt (2016)</p>
+<div class="key-box"><div class="label">KEY DEFINITION</div><p style="margin:0">Creativity = Thinking of new ideas + Solving problems differently + Producing useful and original things</p></div>
+<h3>2. The Four P's of Creativity (Mel Rhodes, 1961)</h3>
+<table class="term-table"><thead><tr><th>P</th><th>Meaning</th><th>Simple Explanation</th></tr></thead><tbody>
+<tr><td><strong>Person</strong></td><td>Creative people</td><td>Characteristics of creative individuals</td></tr>
+<tr><td><strong>Product</strong></td><td>Result created</td><td>The creative output or invention</td></tr>
+<tr><td><strong>Process</strong></td><td>How creativity happens</td><td>Steps used to create ideas</td></tr>
+<tr><td><strong>Press</strong></td><td>Environment</td><td>Surroundings that influence creativity</td></tr>
+</tbody></table>
+<h3>3. Creative Thinking Process (4 Stages)</h3>
+<table class="term-table"><thead><tr><th>Stage</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><strong>Preparation</strong></td><td>Gather information and understand the problem</td></tr>
+<tr><td><strong>Incubation</strong></td><td>Think deeply/subconsciously</td></tr>
+<tr><td><strong>Illumination</strong></td><td>"Aha!" moment — new idea appears</td></tr>
+<tr><td><strong>Verification</strong></td><td>Test and improve the idea</td></tr>
+</tbody></table>
+<h3>4. Qualities of Highly Creative People</h3>
+<ul><li><strong>Imaginative</strong> — Playful, full of ideas</li><li><strong>Need for Originality</strong> — Dislike normal rules, want unique ideas</li><li><strong>Motivation</strong> — Goal-oriented, persistent, hardworking</li><li><strong>Flexibility</strong> — Can see many viewpoints, adaptable thinker</li><li><strong>Low Emotional Stability</strong> — Mood changes easily, sensitive emotions</li><li><strong>Low Sociability</strong> — Sometimes stubborn, like working independently</li></ul>
+<h3>5. Innovation</h3>
+<p><strong>Innovation</strong> is the process of creating something new that brings value. It means turning ideas into useful products/services and improving the way things are done.</p>
+<div class="summary-box"><strong>Easy Memory:</strong> Creativity = Idea &nbsp;|&nbsp; Innovation = Action</div>
+<h3>6. Types of Innovation</h3>
+<table class="term-table"><thead><tr><th>Type</th><th>Meaning</th><th>Example</th></tr></thead><tbody>
+<tr><td><strong>Incremental</strong></td><td>Small improvements</td><td>Better shampoo packaging</td></tr>
+<tr><td><strong>Radical</strong></td><td>Completely new way</td><td>Amazon online model</td></tr>
+<tr><td><strong>Continuous</strong></td><td>Minor change, habits unchanged</td><td>New perfume fragrance</td></tr>
+<tr><td><strong>Discontinuous</strong></td><td>Major change in behaviour</td><td>Internet, mobile phones</td></tr>
+</tbody></table>
+<h3>7. Creativity Killers</h3>
+<table class="term-table"><thead><tr><th>Type</th><th>Examples</th></tr></thead><tbody>
+<tr><td><strong>Perceptual</strong></td><td>Assumptions, stereotyping, narrow focus</td></tr>
+<tr><td><strong>Emotional</strong></td><td>Fear, self-consciousness, stress, fear of failure</td></tr>
+<tr><td><strong>Cultural/Environmental</strong></td><td>Taboos, peer pressure, conservative mindset</td></tr>
+<tr><td><strong>Intellectual/Expressive</strong></td><td>Fear of criticism, lack of curiosity</td></tr>
+</tbody></table>
+<div class="key-box"><div class="label">IMPORTANT REMINDER</div><p style="margin:0">Creativity creates ideas. &nbsp; Innovation makes ideas useful. &nbsp; Curiosity fuels creativity.</p></div>`
+  },
+  {
+    title:"Creative Problem Solving (CPS)",
+    desc:"Learn divergent and convergent thinking, SCAMPER, PPCO, brainstorming, and the 7-step CPS process.",
+    topics:10, cards:50,
+    content:`<h2>Chapter 2: Creative Problem Solving (CPS)</h2>
+<h3>1. What is CPS?</h3>
+<p><strong>Creative Problem Solving (CPS)</strong> is the process of finding innovative and effective solutions by thinking differently and systematically.</p>
+<div class="key-box"><div class="label">ALBERT SZENT-GYÖRGYI QUOTE</div><p style="margin:0">"Creative problem solving is looking at the same things as everyone else while thinking something different."</p></div>
+<h3>2. Divergent vs Convergent Thinking</h3>
+<table class="term-table"><thead><tr><th>Type</th><th>Purpose</th><th>Key Action</th></tr></thead><tbody>
+<tr><td><strong>Divergent</strong></td><td>Generate Ideas</td><td>Brainstorm freely, no judgment</td></tr>
+<tr><td><strong>Convergent</strong></td><td>Select Best Idea</td><td>Evaluate, compare, choose</td></tr>
+</tbody></table>
+<div class="summary-box"><strong>Rule:</strong> Diverge first, Converge later. Never do both at the same time. &nbsp; <strong>Key Principle:</strong> Quantity yields quality.</div>
+<h3>3. Core Principles of CPS</h3>
+<ul><li>Balance divergent and convergent thinking</li><li>Ask problems as questions: "How might we...?"</li><li>Defer judgment — don't criticize early</li><li>Use "Yes, And" — build on ideas</li></ul>
+<h3>4. CPS 7-Step Process</h3>
+<table class="term-table"><thead><tr><th>Step</th><th>Action</th></tr></thead><tbody>
+<tr><td>1</td><td>State the Problem</td></tr>
+<tr><td>2</td><td>Gather Facts, Feelings, and Opinions</td></tr>
+<tr><td>3</td><td>Restate the Problem</td></tr>
+<tr><td>4</td><td>Identify Alternative Solutions</td></tr>
+<tr><td>5</td><td>Evaluate Alternatives</td></tr>
+<tr><td>6</td><td>Implement the Decision</td></tr>
+<tr><td>7</td><td>Evaluate Results</td></tr>
+</tbody></table>
+<h3>5. SCAMPER Technique</h3>
+<table class="term-table"><thead><tr><th>Letter</th><th>Meaning</th><th>Key Question</th></tr></thead><tbody>
+<tr><td><strong>S</strong></td><td>Substitute</td><td>What can be replaced?</td></tr>
+<tr><td><strong>C</strong></td><td>Combine</td><td>What can be combined?</td></tr>
+<tr><td><strong>A</strong></td><td>Adapt</td><td>What can be adapted?</td></tr>
+<tr><td><strong>M</strong></td><td>Modify</td><td>What can be changed?</td></tr>
+<tr><td><strong>P</strong></td><td>Put to other use</td><td>Can it be used differently?</td></tr>
+<tr><td><strong>E</strong></td><td>Eliminate</td><td>What can be removed?</td></tr>
+<tr><td><strong>R</strong></td><td>Rearrange</td><td>What can be reorganized?</td></tr>
+</tbody></table>
+<h3>6. PPCO — Praise First</h3>
+<table class="term-table"><thead><tr><th>Letter</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><strong>P</strong></td><td>Pluses — strengths of the idea</td></tr>
+<tr><td><strong>P</strong></td><td>Potential — future possibilities</td></tr>
+<tr><td><strong>C</strong></td><td>Concerns — problems as "How might we...?" questions</td></tr>
+<tr><td><strong>O</strong></td><td>Overcome Concerns — solve each concern</td></tr>
+</tbody></table>
+<h3>7. Convergent Techniques</h3>
+<ul><li><strong>Highlighting</strong> — HITS → CLUSTER → RESTATE</li><li><strong>PPCO (Praise First)</strong> — evaluate strengths and concerns</li><li><strong>Card Sort</strong> — rank ideas 1 (best) to n (least)</li><li><strong>Evaluation Matrix</strong> — compare options using criteria (rate 1–5)</li></ul>
+<h3>8. Divergent Techniques</h3>
+<ul><li><strong>Brainstorming</strong> — many ideas, no criticism</li><li><strong>SCAMPER</strong> — modify existing ideas</li><li><strong>Mind Map</strong> — visual diagram connecting ideas</li><li><strong>Brainwriting</strong> — silent, ideal for shy participants</li><li><strong>Idea Trigger Method</strong> — Purge → Trigger → Compile</li></ul>
+<div class="key-box"><div class="label">REAL LIFE EXAMPLE</div><p style="margin:0"><strong>James Dyson</strong> — Vacuum bags filled quickly. Solution: Invented the first <strong>bagless vacuum cleaner</strong>. Lesson: Don't just improve the old system — rethink the entire problem.</p></div>`
+  },
+  {
+    title:"Creative Problem Definition",
+    desc:"Master the 8 problem definition techniques including Backwards Forwards Planning, FACR, and Dimensional Analysis.",
+    topics:8, cards:55,
+    content:`<h2>Chapter 3: Creative Problem Definition</h2>
+<h3>What is Problem Definition?</h3>
+<p><strong>Problem Definition</strong> is the process of clearly identifying the real problem before trying to solve it. Understand the actual issue, not just the visible symptoms.</p>
+<h3>Why Problem Definition is Important (F-A-C-R)</h3>
+<table class="term-table"><thead><tr><th>Letter</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><strong>F</strong></td><td>Foundation of solutions</td></tr>
+<tr><td><strong>A</strong></td><td>Avoid wrong problem trap</td></tr>
+<tr><td><strong>C</strong></td><td>Encouraging Creativity</td></tr>
+<tr><td><strong>R</strong></td><td>Resource management</td></tr>
+</tbody></table>
+<h3>8 Problem Definition Techniques</h3>
+<div class="summary-box"><strong>Mnemonic:</strong> B B C 5 W G M D — "Big Brains Create 5 Wise Great Mental Discoveries"</div>
+<h3>1. Backwards Forwards Planning</h3>
+<p>Explore a problem from higher-level goals (backwards) and possible benefits/outcomes (forwards). Best for <strong>open-ended problems</strong>.</p>
+<ul><li>Step 1: Write the problem starting with "How to..."</li><li>Step 2: Move backward — "If solved, what larger problem would it solve?"</li><li>Step 3: Move forward — "What benefits would result?"</li></ul>
+<h3>2. Boundary Examination</h3>
+<p>Examine the <strong>assumptions and limits</strong> surrounding a problem. Key question: <em>"What boundaries are we assuming?"</em> — Challenge unnecessary constraints to expand solutions.</p>
+<h3>3. Chunking</h3>
+<table class="term-table"><thead><tr><th>Type</th><th>Direction</th><th>Use When</th></tr></thead><tbody>
+<tr><td><strong>Chunking Up</strong></td><td>Specific → General</td><td>Too many details, need big picture</td></tr>
+<tr><td><strong>Chunking Down</strong></td><td>General → Specific</td><td>Task feels overwhelming</td></tr>
+</tbody></table>
+<h3>4. 5Ws and 1H</h3>
+<table class="term-table"><thead><tr><th>Question</th><th>Purpose</th></tr></thead><tbody>
+<tr><td>Who</td><td>People involved</td></tr>
+<tr><td>What</td><td>The issue or event</td></tr>
+<tr><td>When</td><td>Time</td></tr>
+<tr><td>Where</td><td>Location</td></tr>
+<tr><td>Why</td><td>Reason</td></tr>
+<tr><td>How</td><td>Process or method</td></tr>
+</tbody></table>
+<h3>5. Why Why Why</h3>
+<p>Repeatedly ask <strong>"Why?"</strong> (3–5 times) to discover the root cause. Example: Machine stopped → Fuse blew → Circuit overloaded → Bearing jammed → Not lubricated → <strong>No maintenance schedule (Root Cause)</strong>.</p>
+<h3>6. Goal Orientation</h3>
+<p>Define the problem based on the <strong>desired end result</strong>. Includes Future-Pacing (imagine problem is solved), the "So What?" Test, and Strategic Alignment.</p>
+<div class="summary-box">Instead of: "How do we fix the product?" → Ask: "How do we deliver the value customers want?"</div>
+<h3>7. Multiple Redefinition</h3>
+<p>Look at the same problem from <strong>many different perspectives</strong> to generate more creative solutions and avoid narrow thinking.</p>
+<h3>8. Dimensional Analysis</h3>
+<table class="term-table"><thead><tr><th>Dimension</th><th>Asks</th></tr></thead><tbody>
+<tr><td><strong>Magnitude</strong></td><td>How big is the problem?</td></tr>
+<tr><td><strong>Time</strong></td><td>When does it happen? How often?</td></tr>
+<tr><td><strong>Cost</strong></td><td>What are the financial effects?</td></tr>
+<tr><td><strong>Space</strong></td><td>Where does it occur?</td></tr>
+<tr><td><strong>Impact</strong></td><td>Who or what is affected?</td></tr>
+</tbody></table>
+<div class="key-box"><div class="label">FINAL SUMMARY</div><p style="margin:0">Creative problem definition means understanding the real problem from multiple angles so that innovative and effective solutions can be developed.</p></div>`
+  }
+];
+
+// ===== FLASHCARDS DATA =====
+const allFlashcards = [
+  // Chapter 1 (index 0)
+  {ch:0,q:"What is creativity?",a:"The creation of something that is both <strong>novel (new)</strong> and <strong>useful</strong>."},
+  {ch:0,q:"Who defined creativity as 'something both novel and useful'?",a:"Teresa Amabile &amp; Pratt (2016)"},
+  {ch:0,q:"What are the Four P's of Creativity?",a:"<strong>Person</strong>, <strong>Product</strong>, <strong>Process</strong>, <strong>Press</strong>"},
+  {ch:0,q:"Who introduced the Four P's Approach?",a:"Mel Rhodes (1961)"},
+  {ch:0,q:"What does 'Person' mean in creativity?",a:"Characteristics and traits of creative people"},
+  {ch:0,q:"What does 'Product' mean in creativity?",a:"The result or output of creativity"},
+  {ch:0,q:"What does 'Process' mean in creativity?",a:"The steps used to create ideas"},
+  {ch:0,q:"What does 'Press' mean in creativity?",a:"The environment that influences creativity"},
+  {ch:0,q:"Name 3 traits of creative people.",a:"Flexible thinking, Curious, Imaginative"},
+  {ch:0,q:"What is divergent thinking?",a:"Thinking of <strong>many possible solutions</strong>"},
+  {ch:0,q:"What are the 4 stages of the creative process?",a:"Preparation → Incubation → Illumination → Verification"},
+  {ch:0,q:"What happens during Illumination?",a:"The <strong>'Aha!' moment</strong> when the idea appears"},
+  {ch:0,q:"What does 'thinking outside the box' mean?",a:"Looking beyond normal solutions and assumptions"},
+  {ch:0,q:"Why do people become less creative as they grow older?",a:"Fear of criticism, social pressure, following routines"},
+  {ch:0,q:"What is innovation?",a:"The process of creating something new that <strong>brings value</strong>"},
+  {ch:0,q:"Difference between creativity and innovation?",a:"Creativity = generating ideas | Innovation = applying ideas"},
+  {ch:0,q:"What is incremental innovation?",a:"<strong>Small improvements</strong> to existing products/processes"},
+  {ch:0,q:"What is radical innovation?",a:"A <strong>completely new way</strong> of doing something"},
+  {ch:0,q:"What is discontinuous innovation?",a:"Innovation that <strong>drastically changes customer habits</strong>"},
+  {ch:0,q:"Name 4 drivers for innovation.",a:"Competition, Technology changes, Customer expectations, Cost reduction"},
+  {ch:0,q:"What are the 4 creativity killers?",a:"Perceptual, Emotional, Cultural/Environmental, Intellectual/Expressive"},
+  {ch:0,q:"What are emotional barriers to creativity?",a:"Fear, stress, and lack of confidence"},
+  {ch:0,q:"Why are children highly creative?",a:"Curious, ask many questions, want to explore freely"},
+  {ch:0,q:"What fuels creativity?",a:"<strong>Curiosity</strong>"},
+  {ch:0,q:"According to Schumpeter, innovation comes from what?",a:"New combinations made by <strong>entrepreneurs</strong>"},
+  // Chapter 1 CPS (index 1)
+  {ch:1,q:"What is Creative Problem Solving (CPS)?",a:"A structured process used to <strong>generate innovative and effective solutions</strong> to problems"},
+  {ch:1,q:"Who said the famous CPS quote?",a:"Albert Szent-Györgyi"},
+  {ch:1,q:"What is divergent thinking?",a:"Generating <strong>many possible ideas</strong> or solutions"},
+  {ch:1,q:"What is convergent thinking?",a:"Evaluating ideas and <strong>selecting the best one</strong>"},
+  {ch:1,q:"What is the key principle of divergent thinking?",a:"<strong>Quantity yields quality</strong>"},
+  {ch:1,q:"What are the four core principles of CPS?",a:"Balance thinking, Ask as questions, Defer judgment, Use 'Yes, And'"},
+  {ch:1,q:"What does SCAMPER stand for?",a:"Substitute, Combine, Adapt, Modify, Put to other use, Eliminate, Rearrange"},
+  {ch:1,q:"What is brainwriting?",a:"Silent brainstorming where participants write ideas — suitable for shy members"},
+  {ch:1,q:"What does PPCO stand for?",a:"Pluses, Potential, Concerns, Overcome Concerns"},
+  {ch:1,q:"What are the 3 steps in Highlighting?",a:"HITS → CLUSTER → RESTATE"},
+  {ch:1,q:"What are the 7 steps of CPS?",a:"State → Gather → Restate → Generate → Evaluate → Implement → Review"},
+  {ch:1,q:"Which inventor is used as a CPS example?",a:"James Dyson — invented the <strong>bagless vacuum cleaner</strong>"},
+  {ch:1,q:"What are the ground rules for diverging?",a:"Defer judgment, Strive for quantity, Seek wild ideas, Build on others' ideas"},
+  {ch:1,q:"What is Card Sort?",a:"Ranking ideas from best to worst using cards (1 = best)"},
+  {ch:1,q:"What is an Evaluation Matrix used for?",a:"Comparing options against selected criteria (rated 1–5)"},
+  {ch:1,q:"Name 3 mental blocks to creativity.",a:"'There is only one right answer', 'That is not logical', 'I'm not creative'"},
+  // Chapter 3 (index 2)
+  {ch:2,q:"What is problem definition?",a:"The process of clearly identifying the <strong>real problem</strong> before trying to solve it"},
+  {ch:2,q:"What does FACR stand for?",a:"Foundation, Avoid wrong problem, Creativity, Resource saving"},
+  {ch:2,q:"How many problem definition techniques are in Chapter 3?",a:"<strong>Eight</strong> techniques"},
+  {ch:2,q:"What mnemonic helps remember the 8 techniques?",a:"B B C 5 W G M D"},
+  {ch:2,q:"What is Backwards Forwards Planning?",a:"Explores higher-level goals (backward) and future benefits (forward)"},
+  {ch:2,q:"What phrase starts the problem in Backwards Forwards Planning?",a:"<strong>'How to...'</strong>"},
+  {ch:2,q:"What is Boundary Examination?",a:"Examining <strong>assumptions and limits</strong> surrounding a problem"},
+  {ch:2,q:"What is Chunking Up?",a:"Moving from <strong>specific details to general concepts</strong>"},
+  {ch:2,q:"What is Chunking Down?",a:"Moving from <strong>general concepts to specific actions</strong>"},
+  {ch:2,q:"What does 5Ws and 1H stand for?",a:"Who, What, When, Where, Why, and How"},
+  {ch:2,q:"What is Why Why Why?",a:"Repeatedly asking 'Why?' (3–5 times) to discover the <strong>root cause</strong>"},
+  {ch:2,q:"What is Goal Orientation?",a:"Defining the problem based on the <strong>desired end result</strong>"},
+  {ch:2,q:"What is Future-Pacing?",a:"Imagining the problem is solved and <strong>working backward</strong>"},
+  {ch:2,q:"What is Multiple Redefinition?",a:"Looking at the same problem from <strong>many different perspectives</strong>"},
+  {ch:2,q:"What are the 5 dimensions in Dimensional Analysis?",a:"Magnitude, Time, Cost, Space, Impact"},
+  {ch:2,q:"Which technique finds root causes?",a:"<strong>Why Why Why</strong>"},
+  {ch:2,q:"Which technique challenges assumptions?",a:"<strong>Boundary Examination</strong>"},
+  {ch:2,q:"Which technique analyzes Magnitude, Time, Cost, Space, Impact?",a:"<strong>Dimensional Analysis</strong>"},
+  {ch:2,q:"Which technique is for open-ended problems?",a:"<strong>Backwards Forwards Planning</strong>"},
+  {ch:2,q:"What is the main goal of creative problem definition?",a:"Understanding the real problem from multiple angles for innovative solutions"},
+];
+
+// ===== QUIZ DATA =====
+const allQuestions = [
+  // Chapter 1
+  {ch:0,q:"Creativity is best defined as:",opts:["Copying existing ideas","Creating something novel and useful","Selling products online","Following traditional methods"],ans:1,exp:"Creativity is defined as producing something both novel (new) and useful — Teresa Amabile & Pratt (2016)."},
+  {ch:0,q:"Who introduced the Four P's Approach of creativity?",opts:["Schumpeter","Teresa Amabile","Mel Rhodes","Albert Einstein"],ans:2,exp:"Mel Rhodes introduced the Four P's model in 1961."},
+  {ch:0,q:"Which of the following is NOT one of the Four P's?",opts:["Person","Product","Process","Planning"],ans:3,exp:"The Four P's are Person, Product, Process, and Press. Planning is not one of them."},
+  {ch:0,q:"The 'Aha!' moment occurs during which stage?",opts:["Preparation","Incubation","Illumination","Verification"],ans:2,exp:"Illumination is the stage where the sudden insight or 'Aha!' moment occurs."},
+  {ch:0,q:"Which statement about creativity is TRUE?",opts:["Only artists can be creative","Creativity cannot be taught","Everyone has creative potential","Creativity decreases intelligence"],ans:2,exp:"Everyone has creative potential — creativity can be learned and developed."},
+  {ch:0,q:"Thinking outside the box means:",opts:["Ignoring all problems","Following normal solutions","Looking for unusual solutions","Avoiding creativity"],ans:2,exp:"Thinking outside the box means breaking assumptions and finding unconventional solutions."},
+  {ch:0,q:"Incremental innovation refers to:",opts:["Completely new inventions","Small improvements to existing products","Removing old systems completely","Sudden technological failure"],ans:1,exp:"Incremental innovation involves small, gradual improvements to existing products or processes."},
+  {ch:0,q:"Which innovation drastically changed communication?",opts:["Shampoo branding","Mobile phone technology","Packaging redesign","Product labels"],ans:1,exp:"Mobile phones are an example of discontinuous innovation that completely changed how people communicate."},
+  {ch:0,q:"Perceptual barriers are caused by:",opts:["Flexible thinking","Assumptions and stereotypes","Curiosity","Teamwork"],ans:1,exp:"Perceptual barriers arise from making assumptions, stereotyping, and focusing too narrowly."},
+  {ch:0,q:"Children are highly creative because they:",opts:["Avoid asking questions","Follow strict routines","Are naturally curious","Fear making mistakes"],ans:2,exp:"Children are highly creative because they are naturally curious, ask many questions, and explore freely."},
+  {ch:0,q:"Innovation must create:",opts:["Complexity","Value","Problems","Risk"],ans:1,exp:"Innovation is defined as creating something new that brings value to people or businesses."},
+  {ch:0,q:"According to Schumpeter, innovation comes from:",opts:["Government regulations","New combinations by entrepreneurs","Advertising only","Traditional business models"],ans:1,exp:"Schumpeter's theory states innovation arises from new combinations created by entrepreneurs."},
+  {ch:0,q:"Which is an example of radical innovation?",opts:["New shampoo fragrance","Improved packaging","Amazon's online business model","Changing product colour"],ans:2,exp:"Amazon's online business model introduced a completely new way of buying and selling goods."},
+  {ch:0,q:"Which factor creates a POSITIVE creativity climate?",opts:["Excessive pressure","Fear of criticism","Organizational encouragement","Lack of resources"],ans:2,exp:"Organizational encouragement, supportive teams, and sufficient resources create positive creativity climates."},
+  {ch:0,q:"What fuels creativity?",opts:["Routine","Fear","Curiosity","Competition"],ans:2,exp:"Curiosity is the primary fuel for creativity — it drives exploration and questioning."},
+  // CPS
+  {ch:1,q:"What is Creative Problem Solving (CPS)?",opts:["Solving problems using trial and error","Following standard procedures only","A structured process for generating innovative solutions","Avoiding difficult problems"],ans:2,exp:"CPS is a structured process for generating and selecting innovative and effective solutions."},
+  {ch:1,q:"What is the main principle of divergent thinking?",opts:["Quality over quantity","Quantity yields quality","Follow only logical ideas","Use only proven solutions"],ans:1,exp:"The key principle of divergent thinking is 'Quantity yields quality' — more ideas = better chance of finding great ones."},
+  {ch:1,q:"Which phrase is encouraged during CPS?",opts:["No, but","This won't work","Yes, and","That is impossible"],ans:2,exp:"'Yes, and' encourages building on ideas rather than blocking them with 'No, but'."},
+  {ch:1,q:"Which technique is best for shy participants?",opts:["Brainstorming","Brainwriting","Card Sort","Evaluation Matrix"],ans:1,exp:"Brainwriting is silent brainstorming, ideal for shy or introverted participants."},
+  {ch:1,q:"What does PPCO stand for?",opts:["Plan, Prepare, Create, Organize","Pluses, Potential, Concerns, Overcome Concerns","Problem, Process, Criteria, Objective","Praise, Prioritize, Compare, Optimize"],ans:1,exp:"PPCO = Pluses (strengths), Potential (possibilities), Concerns (as questions), Overcome Concerns (solutions)."},
+  {ch:1,q:"Which SCAMPER letter stands for 'Put to other use'?",opts:["P","M","E","R"],ans:0,exp:"In SCAMPER, P = Put to other use (can the idea/product be used differently?)."},
+  {ch:1,q:"What are the 3 Highlighting steps?",opts:["Plan, Test, Review","HITS, CLUSTER, RESTATE","Gather, Evaluate, Decide","Brainstorm, Filter, Select"],ans:1,exp:"The Highlighting technique uses: HITS (mark promising ideas) → CLUSTER (group) → RESTATE (combine into solution)."},
+  {ch:1,q:"Which CPS step involves evaluating alternatives?",opts:["Step 2","Step 3","Step 5","Step 7"],ans:2,exp:"Step 5 of CPS is Evaluate Alternatives — consider benefits, risks, costs, and possible new problems."},
+  {ch:1,q:"Divergent and convergent thinking should be:",opts:["Done simultaneously","Done separately","Only used in groups","Avoided in CPS"],ans:1,exp:"Divergent and convergent thinking must be done separately — never at the same time."},
+  {ch:1,q:"What did James Dyson invent using CPS?",opts:["Smart refrigerator","Bagless vacuum cleaner","Microwave oven","Washing machine"],ans:1,exp:"James Dyson invented the bagless vacuum cleaner by rethinking the entire vacuum problem, not just improving bags."},
+  // Problem Definition
+  {ch:2,q:"What is the main purpose of problem definition?",opts:["To create marketing strategies","To clearly identify the real problem before solving it","To reduce production costs","To evaluate employee performance"],ans:1,exp:"Problem definition ensures we address the real issue, not just visible symptoms."},
+  {ch:2,q:"Which mnemonic is used to remember the importance of problem definition?",opts:["SMART","SWOT","FACR","PEST"],ans:2,exp:"FACR = Foundation of solutions, Avoid wrong problem, Creativity, Resource saving."},
+  {ch:2,q:"Which technique is used to identify the root cause?",opts:["Chunking","Why Why Why","Goal Orientation","Boundary Examination"],ans:1,exp:"Why Why Why involves asking 'Why?' 3-5 times to find the true root cause of a problem."},
+  {ch:2,q:"Backwards Forwards Planning is most suitable for:",opts:["Mathematical problems","Closed-ended problems","Open-ended problems","Historical analysis"],ans:2,exp:"Backwards Forwards Planning works best for open-ended problems with no single correct answer."},
+  {ch:2,q:"Boundary Examination focuses on:",opts:["Root causes","Assumptions and restrictions","Customer satisfaction","Financial analysis"],ans:1,exp:"Boundary Examination challenges unnecessary constraints and restrictions around a problem."},
+  {ch:2,q:"Chunking Up means:",opts:["Moving from general to specific","Moving from specific to general","Asking 'Why?' repeatedly","Removing assumptions"],ans:1,exp:"Chunking Up = moving from specific details to broader, general concepts."},
+  {ch:2,q:"Which technique gathers information using 6 questions?",opts:["Chunking","Why Why Why","5Ws and 1H","Multiple Redefinition"],ans:2,exp:"5Ws and 1H uses Who, What, When, Where, Why, and How to gather complete information."},
+  {ch:2,q:"Which dimension asks 'How big is the problem?'",opts:["Space","Cost","Magnitude","Impact"],ans:2,exp:"Magnitude in Dimensional Analysis refers to the size or scale of the problem."},
+  {ch:2,q:"Goal Orientation focuses on:",opts:["Current obstacles only","Desired end results","Team structure","Historical data"],ans:1,exp:"Goal Orientation defines the problem based on the desired end state or outcome."},
+  {ch:2,q:"Which technique views a problem from many perspectives?",opts:["Multiple Redefinition","Why Why Why","5Ws and 1H","Chunking Up"],ans:0,exp:"Multiple Redefinition generates more creative solutions by viewing the problem from different angles."},
+  {ch:2,q:"Which is NOT one of the 5 Dimensional Analysis dimensions?",opts:["Time","Cost","Impact","Motivation"],ans:3,exp:"The 5 dimensions are Magnitude, Time, Cost, Space, and Impact. Motivation is not a dimension."},
+  {ch:2,q:"'Future-Pacing' in Goal Orientation means:",opts:["Studying past failures","Imagining the problem is solved and working backward","Conducting surveys","Hiring consultants"],ans:1,exp:"Future-Pacing means imagining the problem is already solved, then working backward to understand the path."},
+  {ch:2,q:"A well-defined problem naturally leads to:",opts:["Increased competition","A well-crafted solution","Higher employee turnover","Reduced innovation"],ans:1,exp:"A clearly defined problem is the foundation of effective solutions."},
+  {ch:2,q:"Which technique is best when tasks feel overwhelming?",opts:["Chunking Up","Chunking Down","Multiple Redefinition","Goal Orientation"],ans:1,exp:"Chunking Down breaks overwhelming tasks into specific, manageable action steps."},
+  {ch:2,q:"How many times should 'Why?' be asked in Why Why Why?",opts:["Once","Twice","3 to 5 times","Ten times"],ans:2,exp:"Typically asking 'Why?' 3 to 5 times is sufficient to uncover the root cause."},
+];
+
+// ===== STATE =====
+let currentSection = 'hero';
+let currentChapter = null;
+let fcCards = [...allFlashcards];
+let fcIndex = 0;
+let fcMasteredSet = new Set(JSON.parse(localStorage.getItem('ci_mastered')||'[]'));
+let autoPlayInterval = null;
+let autoPlaying = false;
+
+let quizChap = 'all';
+let quizCount = 20;
+let quizQuestions = [];
+let quizCurrent = 0;
+let quizScore = 0;
+let quizTimer = null;
+let quizSeconds = 0;
+let quizAnswered = false;
+let quizHistory = JSON.parse(localStorage.getItem('ci_quiz_history')||'[]');
+let quizReview = [];
+
+// Progress
+let chapProgress = JSON.parse(localStorage.getItem('ci_chap_progress')||'{}');
+let totalStudyTime = parseInt(localStorage.getItem('ci_study_time')||'0');
+let sessionStart = Date.now();
+let studyStreak = parseInt(localStorage.getItem('ci_streak')||'0');
+let lastStudy = localStorage.getItem('ci_last_study')||'';
+
+// ===== INIT =====
+window.onload = function(){
+  // Update streak
+  const today = new Date().toDateString();
+  if(lastStudy !== today){
+    const yesterday = new Date(Date.now()-86400000).toDateString();
+    if(lastStudy === yesterday) studyStreak++;
+    else if(lastStudy !== today) studyStreak = 1;
+    localStorage.setItem('ci_streak', studyStreak);
+    localStorage.setItem('ci_last_study', today);
+  }
+
+  setTimeout(()=>{
+    const loader = document.getElementById('loader');
+    loader.style.opacity = '0';
+    setTimeout(()=>loader.style.display='none', 600);
+  }, 1400);
+
+  initBG();
+  initCursor();
+  renderChapters();
+  loadFlashcards();
+  renderProgress();
+  initKeyboard();
+
+  // Save study time on exit
+  window.addEventListener('beforeunload', ()=>{
+    totalStudyTime += Math.floor((Date.now()-sessionStart)/1000);
+    localStorage.setItem('ci_study_time', totalStudyTime);
+  });
+};
+
+// ===== BG CANVAS =====
+function initBG(){
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+  const particles = Array.from({length:60},()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-0.5)*0.4, vy:(Math.random()-0.5)*0.4,
+    r:Math.random()*2+0.5, opacity:Math.random()*0.5+0.1
+  }));
+  window.addEventListener('resize',()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;});
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const isDark = document.body.getAttribute('data-theme')!=='light';
+    // Connect nearby particles
+    particles.forEach((p,i)=>{
+      particles.slice(i+1).forEach(q=>{
+        const d=Math.hypot(p.x-q.x,p.y-q.y);
+        if(d<120){
+          ctx.beginPath();
+          ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle=isDark?`rgba(26,108,240,${0.12*(1-d/120)})`:`rgba(26,108,240,${0.08*(1-d/120)})`;
+          ctx.lineWidth=0.5;ctx.stroke();
+        }
+      });
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=isDark?`rgba(0,196,255,${p.opacity})`:`rgba(26,108,240,${p.opacity*0.5})`;
+      ctx.fill();
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;
+      if(p.y<0||p.y>H)p.vy*=-1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ===== CURSOR =====
+function initCursor(){
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.transform=`translate(${mx-6}px,${my-6}px)`;});
+  function animRing(){
+    rx+=(mx-rx-16)*0.12; ry+=(my-ry-16)*0.12;
+    ring.style.transform=`translate(${rx}px,${ry}px)`;
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+  document.addEventListener('mousedown',()=>{cur.style.transform+=' scale(1.5)';ring.style.width='24px';ring.style.height='24px';});
+  document.addEventListener('mouseup',()=>{ring.style.width='32px';ring.style.height='32px';});
+}
+
+// ===== NAV =====
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>{if(l.getAttribute('onclick')&&l.getAttribute('onclick').includes("'"+id+"'"))l.classList.add('active');});
+  currentSection = id;
+  // Close mobile menu
+  document.getElementById('navLinks').classList.remove('open');
+  if(id==='progress') renderProgress();
+  if(id==='quiz'){
+    document.getElementById('quizStart').style.display='';
+    document.getElementById('quizEngine').classList.remove('active');
+    document.getElementById('quizResults').classList.remove('active');
+    stopQuizTimer();
+  }
+  window.scrollTo(0,0);
+}
+
+function toggleMenu(){
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+function toggleTheme(){
+  const isLight = document.body.getAttribute('data-theme')==='light';
+  document.body.setAttribute('data-theme', isLight?'':'light');
+  localStorage.setItem('ci_theme', isLight?'dark':'light');
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('ci_theme');
+if(savedTheme==='light') document.body.setAttribute('data-theme','light');
+
+// ===== NOTES =====
+function renderChapters(){
+  const grid = document.getElementById('chapterGrid');
+  grid.innerHTML = chapters.map((c,i)=>{
+    const prog = Math.round((chapProgress[i]||0)*100);
+    return `<div class="chapter-card reveal" onclick="openChapter(${i})">
+      <div class="chapter-header">
+        <div class="chapter-num">0${i+1}</div>
+        <div class="chapter-title-text">${c.title}</div>
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-desc">${c.desc}</div>
+        <div class="chapter-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>${c.topics} Topics</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>${c.cards} Cards</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${prog}%"></div></div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${prog}% complete</div>
+      </div>
+    </div>`;
+  }).join('');
+  // Reveal animation
+  setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible')),100);
+}
+
+function filterChapters(val){
+  const v = val.toLowerCase();
+  document.querySelectorAll('.chapter-card').forEach((c,i)=>{
+    const ch = chapters[i];
+    const show = ch.title.toLowerCase().includes(v)||ch.desc.toLowerCase().includes(v);
+    c.style.display = show?'':'none';
+  });
+}
+
+function openChapter(i){
+  currentChapter = i;
+  document.getElementById('notesMain').style.display='none';
+  document.getElementById('notesDetail').classList.add('active');
+  document.getElementById('notesContent').innerHTML = chapters[i].content;
+  chapProgress[i] = Math.min(1,(chapProgress[i]||0)+0.5);
+  localStorage.setItem('ci_chap_progress',JSON.stringify(chapProgress));
+  window.scrollTo(0,0);
+}
+
+function closeNotes(){
+  document.getElementById('notesMain').style.display='';
+  document.getElementById('notesDetail').classList.remove('active');
+  currentChapter = null;
+}
+
+// ===== FLASHCARDS =====
+function loadFlashcards(){
+  const chapVal = document.getElementById('fcChapter').value;
+  if(chapVal==='all') fcCards = [...allFlashcards];
+  else fcCards = allFlashcards.filter(c=>c.ch===parseInt(chapVal));
+  fcIndex = 0;
+  updateFlashcard();
+}
+
+function updateFlashcard(){
+  if(!fcCards.length) return;
+  const card = fcCards[fcIndex];
+  document.getElementById('fcQuestion').innerHTML = card.q;
+  document.getElementById('fcAnswer').innerHTML = card.a;
+  document.getElementById('fcCounter').textContent = `${fcIndex+1} / ${fcCards.length}`;
+  document.getElementById('fcTag').textContent = `CH${card.ch+1} · CARD ${fcIndex+1}`;
+  document.getElementById('flashcardInner').classList.remove('flipped');
+  // Update mastered btn
+  const btn = document.getElementById('fcMasteredBtn');
+  const key = `${card.ch}_${fcIndex}`;
+  if(fcMasteredSet.has(card.q)){btn.classList.add('mastered');btn.textContent='✓ MASTERED';}
+  else{btn.classList.remove('mastered');btn.textContent='MARK AS MASTERED';}
+  updateFCStats();
+}
+
+function updateFCStats(){
+  const mastered = fcCards.filter(c=>fcMasteredSet.has(c.q)).length;
+  document.getElementById('fcTotal').textContent = fcCards.length;
+  document.getElementById('fcMastered').textContent = mastered;
+  document.getElementById('fcRemaining').textContent = fcCards.length - mastered;
+  document.getElementById('fcProgressBar').style.width = fcCards.length?(mastered/fcCards.length*100)+'%':'0%';
+}
+
+function flipCard(){document.getElementById('flashcardInner').classList.toggle('flipped');}
+function nextCard(){fcIndex=(fcIndex+1)%fcCards.length;updateFlashcard();}
+function prevCard(){fcIndex=(fcIndex-1+fcCards.length)%fcCards.length;updateFlashcard();}
+function shuffleCards(){fcCards.sort(()=>Math.random()-0.5);fcIndex=0;updateFlashcard();}
+function toggleMastered(){
+  const card = fcCards[fcIndex];
+  if(fcMasteredSet.has(card.q)) fcMasteredSet.delete(card.q);
+  else fcMasteredSet.add(card.q);
+  localStorage.setItem('ci_mastered',JSON.stringify([...fcMasteredSet]));
+  updateFlashcard();
+}
+function resetMastered(){fcMasteredSet.clear();localStorage.removeItem('ci_mastered');updateFlashcard();}
+function toggleAutoPlay(){
+  autoPlaying = !autoPlaying;
+  const btn = document.getElementById('autoPlayBtn');
+  if(autoPlaying){btn.classList.add('active');btn.textContent='⏸ STOP';autoPlayInterval=setInterval(()=>{flipCard();setTimeout(()=>nextCard(),1500);},3500);}
+  else{btn.classList.remove('active');btn.textContent='▶ AUTO-PLAY';clearInterval(autoPlayInterval);}
+}
+
+// ===== QUIZ =====
+function selectQuizOpt(el, type){
+  const parent = type==='chap'?document.getElementById('chapterOpts'):document.getElementById('countOpts');
+  parent.querySelectorAll('.quiz-option-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  if(type==='chap') quizChap = el.getAttribute('data-chap');
+  else quizCount = parseInt(el.getAttribute('data-count'));
+}
+
+function startQuiz(){
+  let pool = quizChap==='all'?[...allQuestions]:allQuestions.filter(q=>q.ch===parseInt(quizChap));
+  pool.sort(()=>Math.random()-0.5);
+  quizQuestions = pool.slice(0, Math.min(quizCount, pool.length));
+  quizCurrent = 0; quizScore = 0; quizSeconds = 0; quizReview = [];
+  document.getElementById('quizStart').style.display='none';
+  document.getElementById('quizEngine').classList.add('active');
+  document.getElementById('quizResults').classList.remove('active');
+  startQuizTimer();
+  renderQuestion();
+}
+
+function startQuizTimer(){
+  clearInterval(quizTimer);
+  quizSeconds = 0;
+  quizTimer = setInterval(()=>{
+    quizSeconds++;
+    const m = Math.floor(quizSeconds/60).toString().padStart(2,'0');
+    const s = (quizSeconds%60).toString().padStart(2,'0');
+    const el = document.getElementById('quizTimer');
+    el.textContent = `${m}:${s}`;
+    el.className = 'quiz-timer';
+  },1000);
+}
+
+function stopQuizTimer(){clearInterval(quizTimer);}
+
+function renderQuestion(){
+  const q = quizQuestions[quizCurrent];
+  document.getElementById('qNum').textContent = `Question ${quizCurrent+1} of ${quizQuestions.length}`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('quizProgressLabel').textContent = `${quizCurrent+1} / ${quizQuestions.length}`;
+  document.getElementById('quizProgressFill').style.width = ((quizCurrent+1)/quizQuestions.length*100)+'%';
+  document.getElementById('qExplanation').classList.remove('visible');
+  document.getElementById('qNextBtn').classList.remove('visible');
+  quizAnswered = false;
+  const letters = ['A','B','C','D'];
+  document.getElementById('qAnswers').innerHTML = q.opts.map((opt,i)=>`
+    <button class="quiz-answer-btn" onclick="answerQuiz(${i})">
+      <span class="ans-letter">${letters[i]}</span>
+      <span>${opt}</span>
+    </button>`).join('');
+}
+
+function answerQuiz(i){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const q = quizQuestions[quizCurrent];
+  const btns = document.querySelectorAll('.quiz-answer-btn');
+  btns.forEach((b,idx)=>{
+    b.classList.add('disabled');
+    if(idx===q.ans) b.classList.add('correct');
+    else if(idx===i) b.classList.add('wrong');
+  });
+  if(i===q.ans) quizScore++;
+  document.getElementById('qExplanation').textContent = q.exp;
+  document.getElementById('qExplanation').classList.add('visible');
+  document.getElementById('qNextBtn').classList.add('visible');
+  quizReview.push({q:q.q,correct:i===q.ans,userAns:q.opts[i],correctAns:q.opts[q.ans]});
+}
+
+function nextQuestion(){
+  quizCurrent++;
+  if(quizCurrent>=quizQuestions.length) showResults();
+  else renderQuestion();
+}
+
+function showResults(){
+  stopQuizTimer();
+  document.getElementById('quizEngine').classList.remove('active');
+  document.getElementById('quizResults').classList.add('active');
+  const pct = Math.round(quizScore/quizQuestions.length*100);
+  let grade='F',msg='Keep studying! You can do it.';
+  if(pct>=90){grade='A';msg='Outstanding! Excellent mastery.';}
+  else if(pct>=80){grade='B';msg='Great work! Strong understanding.';}
+  else if(pct>=70){grade='C';msg='Good effort! Review weak areas.';}
+  else if(pct>=60){grade='D';msg='Passing. More practice needed.';}
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultPct').textContent = pct+'%';
+  document.getElementById('resultMsg').textContent = msg;
+  const m=Math.floor(quizSeconds/60), s=quizSeconds%60;
+  document.getElementById('resultCards').innerHTML = `
+    <div class="result-card"><div class="rn">${quizScore}</div><div class="rl">CORRECT</div></div>
+    <div class="result-card"><div class="rn">${quizQuestions.length-quizScore}</div><div class="rl">WRONG</div></div>
+    <div class="result-card"><div class="rn">${pct}%</div><div class="rl">SCORE</div></div>
+    <div class="result-card"><div class="rn">${m}:${s.toString().padStart(2,'0')}</div><div class="rl">TIME</div></div>`;
+  // Review
+  document.getElementById('reviewList').innerHTML = '<h3 style="font-family:Orbitron,monospace;font-size:12px;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:1rem;">QUESTION REVIEW</h3>'+
+    quizReview.map((r,i)=>`<div class="review-item ${r.correct?'correct':'wrong'}">
+      <div class="review-q">${i+1}. ${r.q}</div>
+      <div class="review-a">${r.correct?'<span class="ca">✓ Correct</span>':'<span class="wa">✗ Your answer: '+r.userAns+'</span>'} ${!r.correct?'<span class="ca"> · Correct: '+r.correctAns+'</span>':''}</div>
+    </div>`).join('');
+  // Save history
+  quizHistory.push({date:new Date().toLocaleDateString(),pct,grade,qs:quizQuestions.length});
+  if(quizHistory.length>20) quizHistory.shift();
+  localStorage.setItem('ci_quiz_history',JSON.stringify(quizHistory));
+  // Update progress
+  const bestPct = Math.max(...quizHistory.map(h=>h.pct));
+  localStorage.setItem('ci_best_quiz',bestPct);
+}
+
+function retryQuiz(){
+  startQuiz();
+}
+
+// ===== PROGRESS =====
+function renderProgress(){
+  const mastered = fcMasteredSet.size;
+  const totalCards = allFlashcards.length;
+  const bestQuiz = parseInt(localStorage.getItem('ci_best_quiz')||'0');
+  const chapsDone = Object.values(chapProgress).filter(v=>v>=1).length;
+  const time = totalStudyTime + Math.floor((Date.now()-sessionStart)/1000);
+  const mins = Math.floor(time/60);
+
+  const metrics = [
+    {label:'Flashcards Mastered',val:mastered,max:totalCards,unit:''},
+    {label:'Best Quiz Score',val:bestQuiz,max:100,unit:'%'},
+    {label:'Chapters Read',val:chapsDone,max:chapters.length,unit:''},
+    {label:'Study Time',val:Math.min(mins,999),max:180,unit:'min'},
+  ];
+  document.getElementById('progressGrid').innerHTML = metrics.map(m=>{
+    const pct = Math.min(100,Math.round(m.max>0?m.val/m.max*100:0));
+    const r = 37; const circ = 2*Math.PI*r;
+    const offset = circ - (pct/100)*circ;
+    return `<div class="prog-card">
+      <div class="prog-circle">
+        <svg viewBox="0 0 90 90"><circle class="bg" cx="45" cy="45" r="${r}"/><circle class="fill" cx="45" cy="45" r="${r}" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/></svg>
+        <div class="val">${m.val}${m.unit}</div>
+      </div>
+      <div class="prog-label">${m.label}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('streakDisplay').textContent = studyStreak;
+
+  const badges = [
+    {label:'First Step',desc:'Open your first chapter',earned:chapsDone>0,icon:'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'},
+    {label:'Card Collector',desc:'Study 10+ flashcards',earned:mastered>=10,icon:'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'},
+    {label:'Quiz Taker',desc:'Complete a quiz',earned:quizHistory.length>0,icon:'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'},
+    {label:'Scholar',desc:'Score 80%+ on quiz',earned:bestQuiz>=80,icon:'M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm-1 12.99L5.17 12.5 11 9.42l5.83 3.08L11 15.99z'},
+    {label:'Master Mind',desc:'Master 20+ flashcards',earned:mastered>=20,icon:'M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z'},
+  ];
+  document.getElementById('badgeGrid').innerHTML = badges.map(b=>`
+    <div class="badge ${b.earned?'earned':''}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="${b.earned?'var(--accent2)':'var(--text-muted)'}"><path d="${b.icon}"/></svg>
+      <div><div style="font-size:13px;font-weight:600;">${b.label}</div><div style="font-size:11px;opacity:0.7;">${b.desc}</div></div>
+    </div>`).join('');
+}
+
+// ===== KEYBOARD =====
+function initKeyboard(){
+  document.addEventListener('keydown',e=>{
+    if(currentSection==='flashcards'){
+      if(e.code==='Space'){e.preventDefault();flipCard();}
+      if(e.key==='ArrowRight') nextCard();
+      if(e.key==='ArrowLeft') prevCard();
+      if(e.key.toLowerCase()==='m') toggleMastered();
+    }
+    if(currentSection==='quiz' && document.getElementById('quizEngine').classList.contains('active')){
+      const keys={'1':0,'2':1,'3':2,'4':3};
+      if(keys[e.key]!==undefined && !quizAnswered) answerQuiz(keys[e.key]);
+      if(e.code==='Enter' && quizAnswered) nextQuestion();
+    }
+  });
+}
+</script>
+</body>
+</html>
